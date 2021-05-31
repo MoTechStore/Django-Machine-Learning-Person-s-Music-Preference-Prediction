@@ -1,0 +1,131 @@
+{% extends "invoice/base.html" %}{% load bulma_tags %}
+{% block content %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<br>
+<section class="hero is-fullheight">
+    <div class="container">
+        <div class="card white-ter">
+            <div class="hero-body">
+
+        <div class="card mb-3">
+            <div class="card-header text-success">
+                <i class="fas fa-table"></i>
+                Please Fill In Below Case Details
+            </div>
+            <div class="card-body">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+
+                {{ formset.management_form }}
+                {% for form in formset %}
+
+                <form action="form-container">
+
+                    <div class="form-content">
+                    <div class="form-group row">
+                        <label for="fname" class="control-label col-sm-3">Establish Name</label>
+                        <div class="row">
+                            <div class="col">{{form.esta_cand}}</div> 
+                            <div class="col">{{form.esta_ref}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="fname" class="control-label col-sm-3">Attendance Date</label>
+                        <div class="row">
+                            <div class="col">{{form.attend_cand}}</div> 
+                            <div class="col">{{form.attend_ref}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="fname" class="control-label col-sm-3">Name of course(s) studied</label>
+                        <div class="row">
+                            <div class="col"><input type="text" class="form-control" name="Candidate" placeholder="Candidate"></div> 
+                            <div class="col"><input type="text" class="form-control" name="Referee" placeholder="Referee"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="fname" class="control-label col-sm-3">Qualification and grade awaded</label>
+                        <div class="row">
+                            <div class="col"><input type="text" class="form-control" name="Candidate" placeholder="Candidate"></div> 
+                            <div class="col"><input type="text" class="form-control" name="Referee" placeholder="Referee"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="offset-sm-2 col-sm-8 pull-right">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+
+                </div> 
+                </form>
+                <td>
+                    <div class="input-group-append">
+                        <button id="add-form" 
+                            class="button is-small btn btn-success add-form-row">Add Form</button>&nbsp;
+                   <!--     <button class="button is-small btn btn-warning remove-form-row">-</button> -->
+                    </div>
+                </td>
+                {% endfor %}>
+
+
+    </div>
+</div>
+    </div>
+</section>
+
+
+
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript">
+    $('table input').on("input", function () {
+        var total = []
+        var $tr = $(this).closest('tr');
+        var textValue1 = $("input.rate", $tr).val();
+        var textValue2 = $('input.quantity', $tr).val();
+        amt = textValue1 * textValue2;
+        // console.log(amt);
+        $('.amount', $tr).html(amt);
+        calc_total();
+    });
+
+    function calc_total() {
+        var sum = 0;
+        $(".amount").each(function () {
+            sum += parseFloat($(this).text());
+        });
+        console.log(sum);
+        $('#total').text(sum);
+    }
+</script>
+
+
+<script type="text/javascript">
+        let userForm = document.querySelectorAll(".form-content")
+        let container = document.querySelector("#form-container")
+        let addButton = document.querySelector("#add-form")
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+
+        let formNum = userForm.length-1
+        addButton.addEventListener('click', addForm)
+
+        function addForm(e){
+            e.preventDefault()
+
+            let newForm = userForm[0].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+            formNum++
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            container.insertBefore(newForm, addButton)
+            
+            totalForms.setAttribute('value', `${formNum+1}`)
+        }
+
+</script>
+{% endblock %}

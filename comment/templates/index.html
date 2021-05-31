@@ -1,0 +1,66 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+
+{% block body %}
+
+
+
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js" integrity="sha512-VKjwFVu/mmKGk0Z0BxgDzmn10e590qk3ou/jkmRugAkSTMSIRkd4nEnk+n7r5WBbJquusQEQjBidrBD3IQQISQ==" crossorigin="anonymous"></script>
+
+
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div class="container-fluid" style="padding-top: 90px">
+	<form id="form">
+        <div class="form-group">
+		<input type="text" id="firstname" name="" placeholder="First Name"><br>
+	</div>
+
+        <div class="form-group">
+		<input type="text" id="lastname" name="" placeholder="Last Name"><br>
+	    </div>
+		<button id="button" class="btn btn-primary">Generate PDF</button>
+	</form>
+</div>
+
+</body>
+<script type="text/javascript">
+	var form = document.getElementById('form')
+
+
+	form.addEventListener('submit',function(event){
+		event.preventDefault()
+
+		var fname = document.getElementById('firstname').value
+		var lname = document.getElementById('lastname').value
+        var title = "User Information In Django";
+        var fname_title = "First Name : ";
+        var lname_title = "Last Name : ";
+
+
+
+		var doc = new jsPDF()
+		doc.setFontSize(30)
+        doc.text(30, 20, title);
+		doc.text(fname_title,60,40)
+		doc.text(fname,120,40)
+		doc.text(lname_title,60,60)
+		doc.text(lname,120,60)
+		doc.save("output.pdf")
+	})
+</script>
+</html>
+
+{% endblock body %}

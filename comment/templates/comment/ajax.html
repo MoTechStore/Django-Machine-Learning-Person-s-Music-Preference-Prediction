@@ -1,0 +1,54 @@
+{% load static %}
+
+<link rel="stylesheet" media="screen" href="{% static 'comment/css/bootstrap.css' %}">
+
+<div class="container-fluid">
+	<h1>Django Ajax Submit Form Without Refreshing</h1>
+<form id="myform" method="POST">
+                {% csrf_token %}
+	<div class="form-group">
+		<div class="col">
+			<input type="text" name="firstname"  id="firstname" required="">
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col">
+			<input type="text" name="lastname" id="lastname" required="">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col">
+              <button type="submit" class="submit">Submit</button>
+		</div>
+	</div>
+</form>
+</div>
+
+<script type="text/javascript" src="{% static 'comment/js/jquery.min.js' %}"></script>
+
+<script type="text/javascript">
+	$(document).on('submit', '#myform', function(e){
+		e.preventDefault();
+
+
+		$.ajax({
+			type:'POST',
+			url:'yourajax/',
+			data:{
+				firstname:$('#firstname').val(),
+				lastname:$('#lastname').val(),
+				csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+			},
+
+			success: function(){
+				$('#firstname').val('');
+				$('#lastname').val('');
+				alert("Data Submitted Successfully");
+
+			}
+
+		});
+
+	});
+</script>

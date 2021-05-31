@@ -1,0 +1,173 @@
+{% extends 'bookapp/base.html' %}
+{% block body %}
+
+
+<div class="container-fluid">
+<div class="col-md-10 col-sm-4 col-xs-4" style="padding-top: 37px">
+<div id="content" class="p-8 p-md-5 pt-5">
+    <div class="col-md-12 col-sm-12 col-xs-10">
+      
+        <div id="content-wrapper" id="search_result">
+        <div class="container-fluid">
+            <div class="card mb-3">
+                <div class="card-body">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                   
+
+                        {% if files %}
+                         <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Payment Status</th>
+                                <th>Days Spent</th>
+                                <th>Total Cost</th>
+                  
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for file in files %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td> 
+                                    <td>{{ file.title }}</td>
+                                    <td>{{ file.author }}</td>
+                                    <td>{{ file.is_payed }}</td>
+                                    <td>{{ file.days_spent }}</td>
+                                    <td>{{ file.total_cost }}</td>
+                                </tr>
+                            {% endfor %}
+                        {%else%}
+
+
+
+
+<center><h3 style="text-align:center; color:yellow; background: green; width: 990px" id="answer">No Search Found</h3></center>
+
+                <style type="text/css">
+                  #search_result {
+                 display: none;
+                 }
+    </style>
+
+                       {%endif%}    
+                            </tbody>
+                        </table>
+
+                        {% if files.has_other_pages %}
+    <ul class="pagination">
+        {% if files.has_previous %}
+            <li class="waves-effect"><a href="?page=
+                    {{ files.previous_page_number }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}"><i
+                    class="material-icons text-primary">&laquo;</i></a></li>
+        {% else %}
+            <li class="disabled"><a href="#!"><i class="material-icons text-primary">&laquo;</i></a></li>
+        {% endif %}
+        {% for num in files.paginator.page_range %}
+            {% if files.number == num %}
+                <li class="active"><a href="#!">{{ num }}</a></li>
+            {% else %}
+                <li class="waves-effect"><a
+                        href="?page={{ num }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if files.has_next %}
+            <li class="waves-effect"><a
+                    href="?page={{ files.next_page_number }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}"><i
+                    class="material-icons">&raquo;</i></a></li>
+        {% else %}
+            <li class="disabled"><a href="#!"><i class="material-icons">&raquo;</i></a></li>
+        {% endif %}
+    </ul>
+{% endif %}
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+        
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock body %}
+
+{% block extrascripts %}
+  <script type="text/javascript">
+      $(function () {
+          // Log in & Sign up buttons
+          // The formURL is given explicitly
+          $("#login-btn").modalForm({
+            formURL: "{% url 'login' %}"
+          });
+
+          $("#signup-btn").modalForm({
+            formURL: "{% url 'signup' %}"
+          });
+  
+
+       var asyncSuccessMessageUpdate = [
+            "<div ",
+            "style='position:fixed;top:0;z-index:10000;width:100%;border-radius:0;' ",
+            "class='alert alert-icon alert-success alert-dismissible fade show mb-0' role='alert'>",
+            "Success: Data was updated.",
+            "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>",
+            "<span aria-hidden='true'>&times;</span>",
+            "</button>",
+            "</div>",
+            "<script>",
+            "$('.alert').fadeTo(2000, 500).slideUp(500, function () {$('.alert').slideUp(500).remove();});",
+            "<\/script>"
+          ].join("");
+
+
+      function updateBookModalForm() {
+            $(".update-book").each(function () {
+              $(this).modalForm({
+                formURL: $(this).data("form-url"),
+                asyncUpdate: true,
+                asyncSettings: {
+                  closeOnSubmit: false,
+                  successMessage: asyncSuccessMessageUpdate,
+                  dataUrl: "books/",
+                  dataElementId: "#books-table",
+                  dataKey: "table",
+                  addModalFormFunction: updateBookModalForm
+                }
+              });
+            });
+          }
+          updateBookModalForm();     
+         
+
+          // Read and Delete book buttons open modal with id="modal"
+          // The formURL is retrieved from the data of the element
+          $(".bs-modal").each(function () {
+              $(this).modalForm({formURL: $(this).data("form-url")});
+          });
+
+          // Hide message
+          $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+              $(".alert").slideUp(500);
+          });
+      });
+  </script>
+{% endblock extrascripts %}
+
+
+
+

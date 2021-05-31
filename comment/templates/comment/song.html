@@ -1,0 +1,60 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'comment/vendor/bootstrap/four/css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'comment/vendor/bootstrap/three/css/bootstrap.min.css' %}">
+
+<link rel="stylesheet" type="text/css" href="{% static 'comment/css/comment.css' %}">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <a class="navbar-brand" href="#"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="true" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#"><span class="sr-only">(current)</span></a>
+      </li>
+      <h1 class="text-primary">ManyToManyField In Django</h1>
+    </ul>
+    <span class="navbar-text text-primary">
+      Subscribe For MoTechApp
+    </span>
+  </div>
+</nav>
+<body id="bg" style="background-image: url('{% static "comment/images/4.jpg"%}');">
+
+<div class="container-fluid">
+<div class="row" style="padding-top: 100px">
+	<div class="col-sm-3"></div>
+	<div class="col-sm-6">
+
+
+		<div class="table-responsive" style="background-color: white;">
+	<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Artist</th>
+            <th>Song</th>
+        </tr>
+    </thead>
+        <tbody>
+          {% for song in song_list %}
+          {% for artist in song.artists.all %}
+          <tr>
+            <td>{{ artist.name }}</td>
+            <td>{{ song.title }}</td>
+          </tr>
+          {% endfor %}
+          {% endfor %}
+        </tbody>
+</table>
+</div>
+		
+
+
+	</div>
+	<div class="col-sm-3"></div>
+</div>	
+</div>
+
